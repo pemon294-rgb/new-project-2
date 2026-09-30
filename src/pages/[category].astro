@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
+import { toolsData, categoryInfo } from '../data/tools';
+
+interface Props {
+  category: 'photo' | 'signature' | 'pdf';
+}
+
+export async function getStaticPaths() {
+  return [
+    { params: { category: 'photo' }, props: { category: 'photo' } },
+    { params: { category: 'signature' }, props: { category: 'signature' } },
+    { params: { category: 'pdf' }, props: { category: 'pdf' } }
+  ];
+}
+
+const { category } = Astro.props;
+const info = categoryInfo[category];
+const tools = toolsData.filter(t => t.category === category);
+---
+
+<Layout title={`${info.label} - Kompress`} description={info.description}>
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="text-center mb-12">
+      <div class="text-5xl mb-4">{info.icon}</div>
+      <h1 class="text-4xl font-bold mb-3" style="color: #6B4A3A; font-family: 'Lora', serif;">{info.label}</h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">{info.description}</p>
+    </div>
+
+    <AdPlaceholder className="mb-12" />
+
+    {tools.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {tools.map(tool => (
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-[#D4A574] transition-all">
+            <h3 class="text-xl font-bold mb-2" style="color: #6B4A3A; font-family: 'Lora', serif;">
+              {tool.title}
+            </h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{tool.description}</p>
+            <a
+              href={`/${tool.slug}`}
+              class="inline-block px-4 py-2 rounded-lg font-medium transition-all text-white"
+              style="background-color: #6B4A3A;"
+            >
+              Use tool →
+            </a>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-white rounded-2xl p-12 text-center border border-gray-200 mb-12">
+        <p class="text-lg text-gray-500">Tools in this category coming soon.</p>
+      </div>
+    )}
+
+    <AdPlaceholder className="my-12" />
+  </div>
+</Layout>
