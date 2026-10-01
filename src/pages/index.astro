@@ -1,0 +1,135 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
+import { toolsData, categoryInfo } from '../data/tools';
+
+const popularTools = toolsData.filter(t => t.popular);
+const allTools = toolsData;
+
+const categories = ['photo', 'signature', 'pdf'] as const;
+const getCategoryLabel = (cat: string) => {
+  const info = categoryInfo[cat as keyof typeof categoryInfo];
+  return info?.label || cat;
+};
+---
+
+<Layout title="Free Online Tools - Kompress" description="Compress images, resize photos, merge PDFs, and more with secure browser-based tools. All processing happens on your device.">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-b from-[#FAF6F0] to-white py-12 md:py-20 lg:py-32">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4" style="color: #6B4A3A; font-family: 'Lora', serif;">
+        Compress, Resize & Organize
+      </h1>
+      <p class="text-base sm:text-lg md:text-lg lg:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto">
+        Fast, secure tools that run entirely in your browser. Your files never leave your device.
+      </p>
+      <a href="#popular" class="inline-block px-6 sm:px-8 py-3 md:py-4 rounded-full font-bold text-white text-base md:text-lg transition-transform hover:-translate-y-1" style="background-color: #6B4A3A;">
+        Explore All Tools →
+      </a>
+    </div>
+  </div>
+
+  <!-- Popular Tools Section -->
+  <div id="popular" class="max-w-6xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-2 text-center" style="color: #6B4A3A; font-family: 'Lora', serif;">Most Popular Tools</h2>
+    <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">Start with these trusted tools to compress images, resize photos, and organize PDFs</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+      {popularTools.map(tool => (
+        <a href={`/${tool.slug}`} class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-[#D4A574] transition-all group">
+          <div class="text-3xl mb-3">
+            {tool.category === 'photo' && '📷'}
+            {tool.category === 'signature' && '✍️'}
+            {tool.category === 'pdf' && '📄'}
+          </div>
+          <h3 class="text-lg font-bold mb-2 group-hover:text-[#6B4A3A] transition" style="color: #6B4A3A; font-family: 'Lora', serif;">
+            {tool.title}
+          </h3>
+          <p class="text-sm text-gray-600">{tool.description}</p>
+        </a>
+      ))}
+    </div>
+
+    <div class="text-center">
+      <a href="/photo" class="inline-block px-6 py-2 rounded-full font-medium text-white transition-transform hover:-translate-y-1" style="background-color: #6B4A3A;">
+        See All Tools →
+      </a>
+    </div>
+  </div>
+
+  <AdPlaceholder />
+
+  <!-- Feature Sections -->
+  <div class="max-w-6xl mx-auto px-4 py-16 space-y-16">
+    <!-- Photo & Signature Section -->
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <div class="flex-1">
+          <h3 class="text-2xl font-bold mb-3" style="color: #6B4A3A; font-family: 'Lora', serif;">
+            📷 Compress & Resize Photos
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Reduce file sizes for application forms, resize to exact specifications for passports and IDs, or convert between formats. Perfect for photos, signatures, and documents that need to fit specific requirements without sacrificing quality.
+          </p>
+          <a href="/photo" class="inline-block px-4 py-2 rounded-full font-medium text-white transition-transform hover:-translate-y-1" style="background-color: #6B4A3A;">
+            Try Photo Tools
+          </a>
+        </div>
+        <div class="w-24 h-24 rounded-lg bg-gradient-to-br from-[#FAF6F0] to-[#E8DCC4] flex items-center justify-center text-4xl">
+          📷
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF Conversion & Merging Section -->
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <div class="w-24 h-24 rounded-lg bg-gradient-to-br from-[#FAF6F0] to-[#E8DCC4] flex items-center justify-center text-4xl">
+          📄
+        </div>
+        <div class="flex-1">
+          <h3 class="text-2xl font-bold mb-3" style="color: #6B4A3A; font-family: 'Lora', serif;">
+            📄 Convert & Merge PDFs
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Convert images to PDF, merge multiple documents into one, split large files, and compress PDFs for easy sharing. All processing happens securely in your browser with no uploads to any server.
+          </p>
+          <a href="/pdf" class="inline-block px-4 py-2 rounded-full font-medium text-white transition-transform hover:-translate-y-1" style="background-color: #6B4A3A;">
+            Try PDF Tools
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF Editing Section -->
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <div class="flex-1">
+          <h3 class="text-2xl font-bold mb-3" style="color: #6B4A3A; font-family: 'Lora', serif;">
+            ✏️ Edit & Organize PDFs
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Rotate sideways pages, add page numbers and watermarks, remove or extract specific pages, reorder pages, and crop margins. Take complete control over your PDF documents with intuitive tools designed for simplicity.
+          </p>
+          <a href="/pdf" class="inline-block px-4 py-2 rounded-full font-medium text-white transition-transform hover:-translate-y-1" style="background-color: #6B4A3A;">
+            Try More PDF Tools
+          </a>
+        </div>
+        <div class="w-24 h-24 rounded-lg bg-gradient-to-br from-[#FAF6F0] to-[#E8DCC4] flex items-center justify-center text-4xl">
+          ✏️
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <AdPlaceholder className="my-16" />
+
+  <!-- Trust Section -->
+  <div class="max-w-6xl mx-auto px-4 py-16 bg-white rounded-2xl shadow-sm border border-gray-200 text-center">
+    <div class="text-4xl mb-4">🔒</div>
+    <h2 class="text-2xl font-bold mb-3" style="color: #6B4A3A; font-family: 'Lora', serif;">Your Privacy is Protected</h2>
+    <p class="text-gray-600 max-w-2xl mx-auto">
+      All file processing happens securely in your web browser. Your images, signatures, and documents <strong>never</strong> leave your device or get uploaded to any server. We don't store, track, or analyze your files.
+    </p>
+  </div>
+</Layout>
