@@ -7,8 +7,8 @@ const getCategoryTools = (cat: string) => {
   return toolsData.filter(t => t.category === cat);
 };
 ---
-<header class="bg-white shadow-sm border-b-2 border-[#6B4A3A]">
-  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+<header class="bg-white shadow-sm border-b-2 border-[#6B4A3A] w-full overflow-x-hidden">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between w-full box-border">
     <!-- Logo -->
     <a href="/" class="flex items-center gap-2 text-2xl font-bold" style="color: #6B4A3A; font-family: 'Lora', serif;">
       <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
@@ -93,9 +93,37 @@ const getCategoryTools = (cat: string) => {
   </div>
 </header>
 
-<script>
-  document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+<script is:inline>
+  function initMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
-    menu?.classList.toggle('hidden');
-  });
+
+    if (btn && menu) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+          menu.classList.add('hidden');
+        }
+      });
+
+      // Close menu when clicking a link
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          menu.classList.add('hidden');
+        });
+      });
+    }
+  }
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+  } else {
+    initMobileMenu();
+  }
 </script>
