@@ -23,38 +23,46 @@ export default function Dropzone({ onFileSelect, targetInfo }: DropzoneProps) {
     onFileSelect(selectedFile);
   };
 
-  const dropHandler = (e: React.DragEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    fileInputRef.current?.click();
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsDragOver(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       handleFile(e.dataTransfer.files[0]);
     }
   };
 
-  const handleClick = () => {
-    console.log('[Dropzone] Click handler fired, opening file picker');
-    fileInputRef.current?.click();
-  };
-
   return (
     <div
       ref={dropzoneRef}
-      className={`border-2 border-dashed rounded-xl p-10 text-center transition-colors cursor-pointer touch-none select-none ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
-      onDragOver={(e) => {
-        e.preventDefault();
-        setIsDragOver(true);
+      className="border-2 border-dashed rounded-xl p-10 text-center transition-colors cursor-pointer"
+      style={{
+        borderColor: isDragOver ? '#3b82f6' : '#d1d5db',
+        backgroundColor: isDragOver ? '#eff6ff' : 'transparent'
       }}
-      onDragLeave={() => setIsDragOver(false)}
-      onDrop={dropHandler}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
       onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleClick();
-        }
-      }}
+      onTouchEnd={handleClick}
     >
       <input
         type="file"
@@ -62,19 +70,20 @@ export default function Dropzone({ onFileSelect, targetInfo }: DropzoneProps) {
         className="hidden"
         accept="image/*"
         onChange={(e) => {
-          console.log('[Dropzone] File input changed');
-          e.target.files && handleFile(e.target.files[0]);
+          if (e.target.files) {
+            handleFile(e.target.files[0]);
+          }
         }}
       />
-      <div className="text-gray-500 mb-3 pointer-events-none">
+      <div className="text-gray-500 mb-3">
         <svg className="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
         </svg>
         <p className="font-medium text-lg text-gray-700">Click or Drag & Drop image here</p>
         <p className="text-sm">Supports JPG, PNG, WebP</p>
       </div>
-      {targetInfo && <p className="text-sm text-gray-400 pointer-events-none">{targetInfo}</p>}
-      {errorMsg && <p className="mt-4 text-red-500 font-medium pointer-events-none">{errorMsg}</p>}
+      {targetInfo && <p className="text-sm text-gray-400">{targetInfo}</p>}
+      {errorMsg && <p className="mt-4 text-red-500 font-medium">{errorMsg}</p>}
     </div>
   );
 }

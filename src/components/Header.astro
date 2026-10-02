@@ -25,7 +25,7 @@ const getCategoryTools = (cat: string) => {
           Photo Tools
           <svg class="w-4 h-4 group-hover:rotate-180 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </button>
-        <div class="absolute left-0 mt-0 w-40 lg:w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 text-sm">
+        <div class="absolute left-0 mt-0 w-40 lg:w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-sm">
           {getCategoryTools('photo').map(tool => (
             <a href={`/${tool.slug}`} class="block px-4 py-3 text-sm text-gray-700 hover:bg-[#FAF6F0] hover:text-[#6B4A3A] first:rounded-t-lg last:rounded-b-lg transition">
               {tool.title}
@@ -38,7 +38,7 @@ const getCategoryTools = (cat: string) => {
           Signature Tools
           <svg class="w-4 h-4 group-hover:rotate-180 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </button>
-        <div class="absolute left-0 mt-0 w-40 lg:w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 text-sm">
+        <div class="absolute left-0 mt-0 w-40 lg:w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 text-sm">
           {getCategoryTools('signature').map(tool => (
             <a href={`/${tool.slug}`} class="block px-4 py-3 text-sm text-gray-700 hover:bg-[#FAF6F0] hover:text-[#6B4A3A] first:rounded-t-lg last:rounded-b-lg transition">
               {tool.title}
@@ -51,7 +51,7 @@ const getCategoryTools = (cat: string) => {
           PDF Tools
           <svg class="w-4 h-4 group-hover:rotate-180 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </button>
-        <div class="absolute left-0 mt-0 w-40 lg:w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 max-h-96 overflow-y-auto text-sm">
+        <div class="absolute left-0 mt-0 w-40 lg:w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 max-h-96 overflow-y-auto text-sm">
           {getCategoryTools('pdf').map(tool => (
             <a href={`/${tool.slug}`} class="block px-4 py-3 text-sm text-gray-700 hover:bg-[#FAF6F0] hover:text-[#6B4A3A] first:rounded-t-lg last:rounded-b-lg transition">
               {tool.title}
@@ -105,28 +105,39 @@ const getCategoryTools = (cat: string) => {
 
     console.log('[Header] Initializing mobile menu');
 
-    btn.addEventListener('click', (e) => {
+    // Use direct onclick property instead of addEventListener for better touch support
+    btn.onclick = function(e) {
       e.preventDefault();
       e.stopPropagation();
       console.log('[Header] Menu button clicked');
       menu.classList.toggle('hidden');
-    });
+      return false;
+    };
+
+    // Also bind to touchstart for explicit touch support
+    btn.ontouchstart = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[Header] Menu button touched');
+      menu.classList.toggle('hidden');
+      return false;
+    };
 
     // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
+    document.onclick = function(e) {
       if (menu.classList.contains('hidden')) return;
       if (!btn.contains(e.target) && !menu.contains(e.target)) {
         console.log('[Header] Closing menu (click outside)');
         menu.classList.add('hidden');
       }
-    });
+    };
 
     // Close menu when clicking a link
     menu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+      link.onclick = function() {
         console.log('[Header] Closing menu (link clicked)');
         menu.classList.add('hidden');
-      });
+      };
     });
   }
 
